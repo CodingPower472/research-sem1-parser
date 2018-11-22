@@ -2,7 +2,17 @@
 import serial
 import time
 
-ser = serial.Serial('/dev/cu.usbmodem14101')
+ser = None
+
+try:
+    print('Trying Mac left USB')
+    ser = serial.Serial('/dev/cu.usbmodem14101')
+    print('Succeeded with Mac!')
+except:
+    print('Trying desktop USB')
+    ser = serial.Serial('/dev/ttyACM0')
+    print('Succeeded with desktop!')
+
 file = open('data.csv', 'a+')
 
 def write_value(red, green, blue, reaction_time):
