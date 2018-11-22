@@ -1,6 +1,9 @@
 
 import serial
 import time
+import os
+
+data_path = 'data.csv' # file to put the data in
 
 ser = None
 
@@ -13,7 +16,14 @@ except:
     ser = serial.Serial('/dev/ttyACM0')
     print('Succeeded with desktop!')
 
-file = open('data.csv', 'a+')
+exists = os.path.isfile(data_path)
+
+file = open(data_path, 'a+')
+
+if not exists:
+    file.write('Red,Green,Blue,Reaction Time\n')
+    file.close()
+    file = open(data_path, 'a+')
 
 def write_value(red, green, blue, reaction_time):
     data_point_str = red + ',' + green + ',' + blue + ',' + reaction_time + '\n'
@@ -52,6 +62,6 @@ while True:
             write_value(red, green, blue, diff)
             # edit file now as opposed to when the program is ended
             file.close()
-            file = open('data.csv', 'a+')
+            file = open(data_path, 'a+')
         else:
             print('Ok, not adding.')
