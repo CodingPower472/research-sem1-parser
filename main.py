@@ -2,6 +2,7 @@
 import serial
 import time
 import os
+import sys
 
 data_path = 'data.csv' # file to put the data in
 
@@ -10,11 +11,19 @@ ser = None
 try:
     print('Trying Mac left USB')
     ser = serial.Serial('/dev/cu.usbmodem14101')
-    print('Succeeded with Mac!')
+    print('Succeeded with Mac left USB!')
 except:
-    print('Trying desktop USB')
-    ser = serial.Serial('/dev/ttyACM0')
-    print('Succeeded with desktop!')
+    try:
+        print('Trying Mac right USB')
+        ser = serial.Serial('/dev/cu.usbmodem14201')
+        print('Succeeded with Mac right USB!')
+    except:
+        try:
+            print('Trying desktop USB')
+            ser = serial.Serial('/dev/ttyACM0')
+            print('Succeeded with desktop!')
+        except:
+            sys.exit('No known USB ports worked.  Exiting.')
 
 exists = os.path.isfile(data_path)
 
